@@ -1,0 +1,176 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SMTP Mailer\n"
+"POT-Creation-Date: 2015-12-20 14:09+1000\n"
+"PO-Revision-Date: 2015-12-20 14:09+1000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: main.php:66
+msgid "Settings"
+msgstr ""
+
+#: main.php:72
+msgid "SMTP Mailer"
+msgstr ""
+
+#: main.php:77
+msgid "General"
+msgstr ""
+
+#: main.php:78
+msgid "Test Email"
+msgstr ""
+
+#: main.php:79
+msgid "Server Info"
+msgstr ""
+
+#: main.php:82
+#, php-format
+msgid ""
+"Please visit the <a target=\"_blank\" href=\"%s\">SMTP Mailer</a> "
+"documentation page for usage instructions."
+msgstr ""
+
+#: main.php:141
+msgid "To"
+msgstr ""
+
+#: main.php:143
+msgid "Email address of the recipient"
+msgstr ""
+
+#: main.php:147
+msgid "Subject"
+msgstr ""
+
+#: main.php:149
+msgid "Subject of the email"
+msgstr ""
+
+#: main.php:153
+msgid "Message"
+msgstr ""
+
+#: main.php:155
+msgid "Email body"
+msgstr ""
+
+#: main.php:162
+msgid "Send Email"
+msgstr ""
+
+#: main.php:256
+msgid "Settings Saved!"
+msgstr ""
+
+#: main.php:286
+msgid "SMTP Host"
+msgstr ""
+
+#: main.php:288
+msgid ""
+"The SMTP server which will be used to send email. For example: smtp.gmail.com"
+msgstr ""
+
+#: main.php:292
+msgid "SMTP Authentication"
+msgstr ""
+
+#: main.php:295
+msgid "True"
+msgstr ""
+
+#: main.php:296
+msgid "False"
+msgstr ""
+
+#: main.php:298
+msgid ""
+"Whether to use SMTP Authentication when sending an email (recommended: True)."
+msgstr ""
+
+#: main.php:303
+msgid "SMTP Username"
+msgstr ""
+
+#: main.php:305
+msgid "Your SMTP Username."
+msgstr ""
+
+#: main.php:309
+msgid "SMTP Password"
+msgstr ""
+
+#: main.php:311
+msgid "Your SMTP Password."
+msgstr ""
+
+#: main.php:315
+msgid "Type of Encryption"
+msgstr ""
+
+#: main.php:318
+msgid "TLS"
+msgstr ""
+
+#: main.php:319
+msgid "SSL"
+msgstr ""
+
+#: main.php:320
+msgid "No Encryption"
+msgstr ""
+
+#: main.php:322
+msgid ""
+"The encryption which will be used when sending an email (recommended: TLS)."
+msgstr ""
+
+#: main.php:327
+msgid "SMTP Port"
+msgstr ""
+
+#: main.php:329
+msgid ""
+"The port which will be used when sending an email (587/465/25). If you "
+"choose TLS it should be set to 587. For SSL use port 465 instead."
+msgstr ""
+
+#: main.php:333
+msgid "From Email Address"
+msgstr ""
+
+#: main.php:335
+msgid ""
+"The email address which will be used as the From Address if it is not "
+"supplied to the mail function."
+msgstr ""
+
+#: main.php:339
+msgid "From Name"
+msgstr ""
+
+#: main.php:341
+msgid ""
+"The name which will be used as the From Name if it is not supplied to the "
+"mail function."
+msgstr ""
+
+#: main.php:348
+msgid "Save Changes"
+msgstr ""
+
+#: main.php:368
+msgid ""
+"SMTP Mailer plugin cannot send email until you enter your credentials in the "
+"settings."
+msgstr ""
