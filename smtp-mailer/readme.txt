@@ -2,9 +2,9 @@
 Contributors: naa986
 Donate link: https://wphowto.net/
 Tags: smtp, mail, mailer, phpmailer, wp_mail, email
-Requires at least: 4.7
+Requires at least: 4.8
 Tested up to: 4.8
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,10 @@ For screenshots please visit the [SMTP Mailer](https://wphowto.net/smtp-mailer-p
 none
 
 == Changelog ==
+
+= 1.0.4 =
+* Updated the mail() function by setting its minimum requirements to WordPress 4.8.
+* "phpmailer_init" action hook is now enabled so it can be used by other plugins.
 
 = 1.0.3 =
 * Fixed a bug where an apostrophe in the password would cause SMTP authentication failure.
