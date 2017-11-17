@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.0.4
+Version: 1.0.5
 Plugin URI: http://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: http://wphowto.net/
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.0.4';
+    var $plugin_version = '1.0.5';
     var $phpmailer_version = '5.2.22';
     var $plugin_url;
     var $plugin_path;
@@ -770,7 +770,7 @@ if(!function_exists('wp_mail') && is_smtp_mailer_configured()){
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param PHPMailer &$phpmailer The PHPMailer instance, passed by reference.
+	 * @param PHPMailer $phpmailer The PHPMailer instance (passed by reference).
 	 */
 	do_action_ref_array( 'phpmailer_init', array( &$phpmailer ) );
 

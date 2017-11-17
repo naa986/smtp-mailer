@@ -3,8 +3,8 @@ Contributors: naa986
 Donate link: https://wphowto.net/
 Tags: smtp, mail, mailer, phpmailer, wp_mail, email
 Requires at least: 4.8
-Tested up to: 4.8
-Stable tag: 1.0.4
+Tested up to: 4.9
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,9 @@ For screenshots please visit the [SMTP Mailer](https://wphowto.net/smtp-mailer-p
 none
 
 == Changelog ==
+
+= 1.0.5 =
+* SMTP Mailer is now compatible with WordPress 4.9.
 
 = 1.0.4 =
 * Updated the mail() function by setting its minimum requirements to WordPress 4.8.
