@@ -2,9 +2,9 @@
 /*
 Plugin Name: SMTP Mailer
 Version: 1.0.5
-Plugin URI: http://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
+Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
-Author URI: http://wphowto.net/
+Author URI: https://wphowto.net/
 Description: Configure a SMTP server to send email from your WordPress site
 Text Domain: smtp-mailer
 Domain Path: /languages 
@@ -78,7 +78,7 @@ class SMTP_MAILER {
             'smtp-mailer-settings&action=test-email' => __('Test Email', 'smtp-mailer'),
             'smtp-mailer-settings&action=server-info' => __('Server Info', 'smtp-mailer'),
         );
-        $url = "http://wphowto.net/smtp-mailer-plugin-for-wordpress-1482";
+        $url = "https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482";
         $link_text = sprintf(wp_kses(__('Please visit the <a target="_blank" href="%s">SMTP Mailer</a> documentation page for usage instructions.', 'smtp-mailer'), array('a' => array('href' => array(), 'target' => array()))), esc_url($url));
         echo '<div class="wrap"><h2>SMTP Mailer v' . SMTP_MAILER_VERSION . '</h2>';
         echo '<div class="update-nag">'.$link_text.'</div>';
