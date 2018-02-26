@@ -14,11 +14,13 @@ Configure a SMTP server to send email from your WordPress site. Configure the wp
 
 [SMTP Mailer](https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482) plugin allows you to configure a mail server which handles all outgoing email from your website. It takes control of the wp_mail function and use SMTP instead.
 
-= Requirements =
+https://www.youtube.com/watch?v=7O_jgtykcEk&rel=0
+
+=== Requirements ===
 
 * A self-hosted website running on [WordPress hosting](https://wphowto.net/best-cheap-wordpress-hosting-1689)
 
-= SMTP Mailer Settings =
+=== SMTP Mailer Settings ===
 
 * **SMTP Host**: Your outgoing mail server (e.g. smtp.gmail.com).
 * **SMTP Authentication**: Whether to use SMTP authentication when sending an email (True/False). If you choose to authenticate you will also need to provide your username and password.
@@ -29,7 +31,7 @@ Configure a SMTP server to send email from your WordPress site. Configure the wp
 * **From Email Address**: The email address to be used as the From Address when sending an email.
 * **From Name**: The name to be used as the From Name when sending an email.
 
-= SMTP Mailer Test Email =
+=== SMTP Mailer Test Email ===
 
 Once you have configured the settings you can send a test email to check the functionality of the plugin.
  
@@ -37,7 +39,7 @@ Once you have configured the settings you can send a test email to check the fun
 * **Subject**: Subject of the email.
 * **Message**: Email body.
 
-= Known Compatibility =
+=== Known Compatibility ===
 
 SMTP Mailer should work with any plugin that uses the WordPress Mail function. However, It has been tested with the following form and contact form plugins:
 
