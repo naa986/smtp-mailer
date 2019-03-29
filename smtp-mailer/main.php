@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.0.5
+Version: 1.0.6
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.0.5';
+    var $plugin_version = '1.0.6';
     var $phpmailer_version = '5.2.22';
     var $plugin_url;
     var $plugin_path;
@@ -283,10 +283,6 @@ class SMTP_MAILER {
             $options['disable_ssl_verification'] = '';
         }
         
-        $smtp_password = '';
-        if(isset($options['smtp_password']) && !empty($options['smtp_password'])){
-            $smtp_password = base64_decode($options['smtp_password']);
-        }
         ?>
 
         <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
@@ -321,8 +317,8 @@ class SMTP_MAILER {
                     
                     <tr valign="top">
                         <th scope="row"><label for="smtp_password"><?php _e('SMTP Password', 'smtp-mailer');?></label></th>
-                        <td><input name="smtp_password" type="password" id="smtp_password" value="<?php echo $smtp_password; ?>" class="regular-text code">
-                            <p class="description"><?php _e('Your SMTP Password.', 'smtp-mailer');?></p></td>
+                        <td><input name="smtp_password" type="password" id="smtp_password" value="" class="regular-text code">
+                            <p class="description"><?php _e('Your SMTP Password (The saved password is not shown for security reasons. You need enter it every time you update the settings).', 'smtp-mailer');?></p></td>
                     </tr>
                     
                     <tr>
