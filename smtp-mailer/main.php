@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.0.6
+Version: 1.0.7
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.0.6';
+    var $plugin_version = '1.0.7';
     var $phpmailer_version = '5.2.22';
     var $plugin_url;
     var $plugin_path;
@@ -115,6 +115,10 @@ class SMTP_MAILER {
     
     function test_email_settings(){
         if(isset($_POST['smtp_mailer_send_test_email'])){
+            $nonce = $_REQUEST['_wpnonce'];
+            if (!wp_verify_nonce($nonce, 'smtp_mailer_test_email')) {
+                wp_die(__('Error! Nonce Security Check Failed! please send the test email again.', 'smtp-mailer'));
+            }
             $to = '';
             if(isset($_POST['smtp_mailer_to_email']) && !empty($_POST['smtp_mailer_to_email'])){
                 $to = sanitize_text_field($_POST['smtp_mailer_to_email']);
@@ -207,7 +211,7 @@ class SMTP_MAILER {
         if (isset($_POST['smtp_mailer_update_settings'])) {
             $nonce = $_REQUEST['_wpnonce'];
             if (!wp_verify_nonce($nonce, 'smtp_mailer_general_settings')) {
-                wp_die('Error! Nonce Security Check Failed! please save the settings again.');
+                wp_die(__('Error! Nonce Security Check Failed! please save the settings again.', 'smtp-mailer'));
             }
             $smtp_host = '';
             if(isset($_POST['smtp_host']) && !empty($_POST['smtp_host'])){
