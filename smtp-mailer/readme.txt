@@ -3,8 +3,8 @@ Contributors: naa986
 Donate link: https://wphowto.net/
 Tags: smtp, mail, mailer, phpmailer, wp_mail, email
 Requires at least: 4.8
-Tested up to: 5.2
-Stable tag: 1.0.7
+Tested up to: 5.3
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,9 @@ Yes.
 none
 
 == Changelog ==
+
+= 1.0.8 =
+* SMTP Mailer is compatible with WordPress 5.3.
 
 = 1.0.7 =
 * SMTP Mailer now checks for a valid nonce when sending a test email.
