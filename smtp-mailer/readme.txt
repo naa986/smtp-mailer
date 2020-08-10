@@ -1,10 +1,10 @@
 === SMTP Mailer ===
 Contributors: naa986
 Donate link: https://wphowto.net/
-Tags: smtp, mail, mailer, phpmailer, wp_mail, email
-Requires at least: 4.8
-Tested up to: 5.4
-Stable tag: 1.0.8
+Tags: email, mail, smtp, phpmailer
+Requires at least: 5.5
+Tested up to: 5.5
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,9 @@ Yes.
 none
 
 == Changelog ==
+
+= 1.0.9 =
+* Updated the code to be compatible with WordPress 5.5.
 
 = 1.0.8 =
 * SMTP Mailer is compatible with WordPress 5.3.
