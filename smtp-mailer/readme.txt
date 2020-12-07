@@ -3,7 +3,7 @@ Contributors: naa986
 Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
 Requires at least: 5.5
-Tested up to: 5.5
+Tested up to: 5.6
 Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -62,6 +62,38 @@ For detailed setup instructions please visit the [SMTP Mailer](https://wphowto.n
 == Frequently Asked Questions ==
 
 = Can I send email via SMTP from my website using this plugin? =
+
+Yes.
+
+= Can I use this plugin with Gmail SMTP? =
+
+Yes.
+
+= Can I use this plugin on any SMTP port? =
+
+Yes.
+
+= Can I use this plugin with Sendinblue SMTP? =
+
+Yes.
+
+= Can I use this plugin with Mailgun SMTP? =
+
+Yes.
+
+= Can I use this plugin with SendGrid SMTP? =
+
+Yes.
+
+= Can I use this plugin with Postmark SMTP? =
+
+Yes.
+
+= Can I use this plugin with Office365 SMTP? =
+
+Yes.
+
+= Can I use this plugin with ZohoMail SMTP? =
 
 Yes.
 
