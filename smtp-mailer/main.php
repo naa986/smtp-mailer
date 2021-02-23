@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.0.9
+Version: 1.1.0
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.0.9';
+    var $plugin_version = '1.1.0';
     var $phpmailer_version = '6.1.6';
     var $plugin_url;
     var $plugin_path;
@@ -256,7 +256,9 @@ class SMTP_MAILER {
             $options['smtp_host'] = $smtp_host;
             $options['smtp_auth'] = $smtp_auth;
             $options['smtp_username'] = $smtp_username;
-            $options['smtp_password'] = $smtp_password;
+            if(!empty($smtp_password)){
+                $options['smtp_password'] = $smtp_password;
+            }
             $options['type_of_encryption'] = $type_of_encryption;
             $options['smtp_port'] = $smtp_port;
             $options['from_email'] = $from_email;
@@ -270,16 +272,7 @@ class SMTP_MAILER {
         
         $options = smtp_mailer_get_option();
         if(!is_array($options)){
-            $options = array();
-            $options['smtp_host'] = '';
-            $options['smtp_auth'] = '';
-            $options['smtp_username'] = '';
-            $options['smtp_password'] = '';
-            $options['type_of_encryption'] = '';
-            $options['smtp_port'] = '';
-            $options['from_email'] = '';
-            $options['from_name'] = '';
-            $options['disable_ssl_verification'] = '';
+            $options = smtp_mailer_get_empty_options_array();
         }
         
         // Avoid warning notice since this option was added later
@@ -322,7 +315,7 @@ class SMTP_MAILER {
                     <tr valign="top">
                         <th scope="row"><label for="smtp_password"><?php _e('SMTP Password', 'smtp-mailer');?></label></th>
                         <td><input name="smtp_password" type="password" id="smtp_password" value="" class="regular-text code">
-                            <p class="description"><?php _e('Your SMTP Password (The saved password is not shown for security reasons. You need enter it every time you update the settings).', 'smtp-mailer');?></p></td>
+                            <p class="description"><?php _e('Your SMTP Password (The saved password is not shown for security reasons. If you do not want to update the saved password, you can leave this field empty when updating other options).', 'smtp-mailer');?></p></td>
                     </tr>
                     
                     <tr>
@@ -377,8 +370,32 @@ function smtp_mailer_get_option(){
     return $options;
 }
 
-function smtp_mailer_update_option($options){
-    update_option('smtp_mailer_options', $options);
+function smtp_mailer_update_option($new_options){
+    $empty_options = smtp_mailer_get_empty_options_array();
+    $options = smtp_mailer_get_option();
+    if(is_array($options)){
+        $current_options = array_merge($empty_options, $options);
+        $updated_options = array_merge($current_options, $new_options);
+        update_option('smtp_mailer_options', $updated_options);
+    }
+    else{
+        $updated_options = array_merge($empty_options, $new_options);
+        update_option('smtp_mailer_options', $updated_options);
+    }
+}
+
+function smtp_mailer_get_empty_options_array(){
+    $options = array();
+    $options['smtp_host'] = '';
+    $options['smtp_auth'] = '';
+    $options['smtp_username'] = '';
+    $options['smtp_password'] = '';
+    $options['type_of_encryption'] = '';
+    $options['smtp_port'] = '';
+    $options['from_email'] = '';
+    $options['from_name'] = '';
+    $options['disable_ssl_verification'] = '';
+    return $options;
 }
 
 function smtp_mailer_admin_notice() {        
