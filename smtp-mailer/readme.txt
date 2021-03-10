@@ -2,9 +2,9 @@
 Contributors: naa986
 Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
-Requires at least: 5.5
+Requires at least: 5.7
 Tested up to: 5.7
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,9 @@ Yes.
 none
 
 == Changelog ==
+
+= 1.1.1 =
+* WordPress 5.7 compatibility update.
 
 = 1.1.0 =
 * The password field can be left empty when updating the settings.
