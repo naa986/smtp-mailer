@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.1
+Version: 1.1.2
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.1';
+    var $plugin_version = '1.1.2';
     var $phpmailer_version = '6.3.0';
     var $plugin_url;
     var $plugin_path;
@@ -467,10 +467,9 @@ function smtp_mailer_pre_wp_mail($null, $atts)
 
     if ( isset( $atts['attachments'] ) ) {
             $attachments = $atts['attachments'];
-    }
-
-    if ( ! is_array( $attachments ) ) {
-            $attachments = explode( "\n", str_replace( "\r\n", "\n", $attachments ) );
+            if ( ! is_array( $attachments ) ) {
+                    $attachments = explode( "\n", str_replace( "\r\n", "\n", $attachments ) );
+            }
     }
     
     $options = smtp_mailer_get_option();
@@ -778,7 +777,7 @@ function smtp_mailer_pre_wp_mail($null, $atts)
             }
     }
 
-    if ( ! empty( $attachments ) ) {
+    if ( isset( $attachments ) && ! empty( $attachments ) ) {
             foreach ( $attachments as $attachment ) {
                     try {
                             $phpmailer->addAttachment( $attachment );
