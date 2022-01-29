@@ -2,9 +2,9 @@
 Contributors: naa986
 Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
-Requires at least: 5.7
-Tested up to: 5.8
-Stable tag: 1.1.2
+Requires at least: 5.9
+Tested up to: 5.9
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,10 +15,6 @@ Configure a SMTP server to send email from your WordPress site. Configure the wp
 [SMTP Mailer](https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482) plugin allows you to configure a mail server which handles all outgoing email from your website. It takes control of the wp_mail function and use SMTP instead.
 
 https://www.youtube.com/watch?v=7O_jgtykcEk&rel=0
-
-=== Requirements ===
-
-* A self-hosted website running on [WordPress hosting](https://wphowto.net/best-cheap-wordpress-hosting-1689)
 
 === SMTP Mailer Settings ===
 
@@ -106,6 +102,9 @@ Yes.
 none
 
 == Changelog ==
+
+= 1.1.3 =
+* Updated the mail function for WordPress 5.9.
 
 = 1.1.2 =
 * Fixed an issue that could cause an Undefined variable error if $attachments was not set.
