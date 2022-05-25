@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.3
+Version: 1.1.4
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,8 +16,8 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.3';
-    var $phpmailer_version = '6.5.3';
+    var $plugin_version = '1.1.4';
+    var $phpmailer_version = '6.6.0';
     var $plugin_url;
     var $plugin_path;
     
@@ -80,13 +80,22 @@ class SMTP_MAILER {
             'smtp-mailer-settings&action=server-info' => __('Server Info', 'smtp-mailer'),
         );
         $url = "https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482";
-        $link_text = sprintf(wp_kses(__('Please visit the <a target="_blank" href="%s">SMTP Mailer</a> documentation page for usage instructions.', 'smtp-mailer'), array('a' => array('href' => array(), 'target' => array()))), esc_url($url));
+        $link_text = sprintf(__('Please visit the <a target="_blank" href="%s">SMTP Mailer</a> documentation page for usage instructions.', 'smtp-mailer'), esc_url($url));
+        $allowed_html_tags = array(
+            'a' => array(
+                'href' => array(),
+                'target' => array()
+            )
+        );
         echo '<div class="wrap"><h2>SMTP Mailer v' . SMTP_MAILER_VERSION . '</h2>';
-        echo '<div class="update-nag">'.$link_text.'</div>';
+        echo '<div class="update-nag">'.wp_kses($link_text, $allowed_html_tags).'</div>';
+        $current = '';
+        $action = '';
         if (isset($_GET['page'])) {
-            $current = $_GET['page'];
+            $current = sanitize_text_field($_GET['page']);
             if (isset($_GET['action'])) {
-                $current .= "&action=" . $_GET['action'];
+                $action = sanitize_text_field($_GET['action']);
+                $current .= "&action=" . $action;
             }
         }
         $content = '';
@@ -100,17 +109,33 @@ class SMTP_MAILER {
             $content .= '<a class="nav-tab' . $class . '" href="?page=' . $location . '">' . $tabname . '</a>';
         }
         $content .= '</h2>';
-        echo $content;
-                
-        if(isset($_GET['action']) && $_GET['action'] == 'test-email'){            
-            $this->test_email_settings();
+        $allowed_html_tags = array(
+            'a' => array(
+                'href' => array(),
+                'class' => array()
+            ),
+            'h2' => array(
+                'href' => array(),
+                'class' => array()
+            )
+        );
+        echo wp_kses($content, $allowed_html_tags);
+        if(!empty($action))
+        { 
+            switch($action)
+            {
+               case 'test-email':
+                   $this->test_email_settings();
+                   break;
+               case 'server-info':
+                   $this->server_info_settings();
+                   break;
+            }
         }
-        else if(isset($_GET['action']) && $_GET['action'] == 'server-info'){            
-            $this->server_info_settings();
-        }
-        else{
+        else
+        {
             $this->general_settings();
-        }
+        }        
         echo '</div>';
     }
     
@@ -122,7 +147,7 @@ class SMTP_MAILER {
             }
             $to = '';
             if(isset($_POST['smtp_mailer_to_email']) && !empty($_POST['smtp_mailer_to_email'])){
-                $to = sanitize_text_field($_POST['smtp_mailer_to_email']);
+                $to = sanitize_email($_POST['smtp_mailer_to_email']);
             }
             $subject = '';
             if(isset($_POST['smtp_mailer_email_subject']) && !empty($_POST['smtp_mailer_email_subject'])){
@@ -135,7 +160,7 @@ class SMTP_MAILER {
             wp_mail($to, $subject, $message);           
         }
         ?>
-        <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+        <form method="post" action="">
             <?php wp_nonce_field('smtp_mailer_test_email'); ?>
 
             <table class="form-table">
@@ -203,7 +228,7 @@ class SMTP_MAILER {
         $server_info .= sprintf('stream_socket_client: %s%s', $stream_socket_client_status, PHP_EOL);
         $server_info .= sprintf('fsockopen: %s%s%s', $fsockopen_status, $socket_text, PHP_EOL);
         ?>
-        <textarea rows="10" cols="50" class="large-text code"><?php echo $server_info;?></textarea>
+        <textarea rows="10" cols="50" class="large-text code"><?php echo esc_textarea($server_info);?></textarea>
         <?php
     }
 
@@ -283,7 +308,7 @@ class SMTP_MAILER {
         
         ?>
 
-        <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+        <form method="post" action="">
             <?php wp_nonce_field('smtp_mailer_general_settings'); ?>
 
             <table class="form-table">
@@ -292,7 +317,7 @@ class SMTP_MAILER {
                     
                     <tr valign="top">
                         <th scope="row"><label for="smtp_host"><?php _e('SMTP Host', 'smtp-mailer');?></label></th>
-                        <td><input name="smtp_host" type="text" id="smtp_host" value="<?php echo $options['smtp_host']; ?>" class="regular-text code">
+                        <td><input name="smtp_host" type="text" id="smtp_host" value="<?php echo esc_attr($options['smtp_host']); ?>" class="regular-text code">
                             <p class="description"><?php _e('The SMTP server which will be used to send email. For example: smtp.gmail.com', 'smtp-mailer');?></p></td>
                     </tr>
                     
@@ -309,7 +334,7 @@ class SMTP_MAILER {
                     
                     <tr valign="top">
                         <th scope="row"><label for="smtp_username"><?php _e('SMTP Username', 'smtp-mailer');?></label></th>
-                        <td><input name="smtp_username" type="text" id="smtp_username" value="<?php echo $options['smtp_username']; ?>" class="regular-text code">
+                        <td><input name="smtp_username" type="text" id="smtp_username" value="<?php echo esc_attr($options['smtp_username']); ?>" class="regular-text code">
                             <p class="description"><?php _e('Your SMTP Username.', 'smtp-mailer');?></p></td>
                     </tr>
                     
@@ -333,19 +358,19 @@ class SMTP_MAILER {
                     
                     <tr valign="top">
                         <th scope="row"><label for="smtp_port"><?php _e('SMTP Port', 'smtp-mailer');?></label></th>
-                        <td><input name="smtp_port" type="text" id="smtp_port" value="<?php echo $options['smtp_port']; ?>" class="regular-text code">
+                        <td><input name="smtp_port" type="text" id="smtp_port" value="<?php echo esc_attr($options['smtp_port']); ?>" class="regular-text code">
                             <p class="description"><?php _e('The port which will be used when sending an email (587/465/25). If you choose TLS it should be set to 587. For SSL use port 465 instead.', 'smtp-mailer');?></p></td>
                     </tr>                                      
                     
                     <tr valign="top">
                         <th scope="row"><label for="from_email"><?php _e('From Email Address', 'smtp-mailer');?></label></th>
-                        <td><input name="from_email" type="text" id="from_email" value="<?php echo $options['from_email']; ?>" class="regular-text code">
+                        <td><input name="from_email" type="text" id="from_email" value="<?php echo esc_attr($options['from_email']); ?>" class="regular-text code">
                             <p class="description"><?php _e('The email address which will be used as the From Address if it is not supplied to the mail function.', 'smtp-mailer');?></p></td>
                     </tr>
                     
                     <tr valign="top">
                         <th scope="row"><label for="from_name"><?php _e('From Name', 'smtp-mailer');?></label></th>
-                        <td><input name="from_name" type="text" id="from_name" value="<?php echo $options['from_name']; ?>" class="regular-text code">
+                        <td><input name="from_name" type="text" id="from_name" value="<?php echo esc_attr($options['from_name']); ?>" class="regular-text code">
                             <p class="description"><?php _e('The name which will be used as the From Name if it is not supplied to the mail function.', 'smtp-mailer');?></p></td>
                     </tr>
                     
@@ -600,11 +625,16 @@ function smtp_mailer_pre_wp_mail($null, $atts)
      */
     if ( ! isset( $from_email ) ) {
             // Get the site domain and get rid of www.
-            $sitename = wp_parse_url( network_home_url(), PHP_URL_HOST );
-            if ( 'www.' === substr( $sitename, 0, 4 ) ) {
-                    $sitename = substr( $sitename, 4 );
-            }
+            $sitename   = wp_parse_url( network_home_url(), PHP_URL_HOST );
+            $from_email = 'wordpress@';
 
+            if ( null !== $sitename ) {
+                    if ( 'www.' === substr( $sitename, 0, 4 ) ) {
+                            $sitename = substr( $sitename, 4 );
+                    }
+
+                    $from_email .= $sitename;
+            }
             $from_email = $options['from_email'];//'wordpress@' . $sitename;
     }
 
@@ -803,15 +833,23 @@ function smtp_mailer_pre_wp_mail($null, $atts)
             $send = $phpmailer->send();
 
             /**
-             * Fires after PHPMailer has successfully sent a mail.
+             * Fires after PHPMailer has successfully sent an email.
              *
-             * The firing of this action does not necessarily mean that the recipient received the
+             * The firing of this action does not necessarily mean that the recipient(s) received the
              * email successfully. It only means that the `send` method above was able to
              * process the request without any errors.
              *
              * @since 5.9.0
              *
-             * @param array $mail_data An array containing the mail recipient, subject, message, headers, and attachments.
+             * @param array $mail_data {
+             *     An array containing the email recipient(s), subject, message, headers, and attachments.
+             *
+             *     @type string[] $to          Email addresses to send message.
+             *     @type string   $subject     Email subject.
+             *     @type string   $message     Message contents.
+             *     @type string[] $headers     Additional headers.
+             *     @type string[] $attachments Paths to files to attach.
+             * }
              */
             do_action( 'wp_mail_succeeded', $mail_data );
 
