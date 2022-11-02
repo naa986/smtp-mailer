@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.4
+Version: 1.1.5
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,8 +16,8 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.4';
-    var $phpmailer_version = '6.6.0';
+    var $plugin_version = '1.1.5';
+    var $phpmailer_version = '6.6.5';
     var $plugin_url;
     var $plugin_path;
     
@@ -555,7 +555,7 @@ function smtp_mailer_pre_wp_mail($null, $atts)
                                             if ( false !== $bracket_pos ) {
                                                     // Text before the bracketed email is the "From" name.
                                                     if ( $bracket_pos > 0 ) {
-                                                            $from_name = substr( $content, 0, $bracket_pos - 1 );
+                                                            $from_name = substr( $content, 0, $bracket_pos );
                                                             $from_name = str_replace( '"', '', $from_name );
                                                             $from_name = trim( $from_name );
                                                     }
@@ -608,6 +608,8 @@ function smtp_mailer_pre_wp_mail($null, $atts)
     $phpmailer->clearAttachments();
     $phpmailer->clearCustomHeaders();
     $phpmailer->clearReplyTos();
+    $phpmailer->Body    = '';
+    $phpmailer->AltBody = '';
 
     // Set "From" name and email.
 
