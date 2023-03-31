@@ -2,9 +2,9 @@
 Contributors: naa986
 Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
-Requires at least: 6.1
-Tested up to: 6.1
-Stable tag: 1.1.5
+Requires at least: 6.2
+Tested up to: 6.2
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,9 @@ Yes.
 none
 
 == Changelog ==
+
+= 1.1.6 =
+* WordPress 6.2 compatibility update.
 
 = 1.1.5 =
 * Compatibility update for WordPress 6.1.

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.5
+Version: 1.1.6
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,8 +16,8 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.5';
-    var $phpmailer_version = '6.6.5';
+    var $plugin_version = '1.1.6';
+    var $phpmailer_version = '6.7';
     var $plugin_url;
     var $plugin_path;
     
@@ -756,7 +756,7 @@ function smtp_mailer_pre_wp_mail($null, $atts)
     }
     // Set Content-Type and charset.
 
-    // If we don't have a content-type from the input headers.
+    // If we don't have a Content-Type from the input headers.
     if ( ! isset( $content_type ) ) {
             $content_type = 'text/plain';
     }
@@ -810,9 +810,11 @@ function smtp_mailer_pre_wp_mail($null, $atts)
     }
 
     if ( isset( $attachments ) && ! empty( $attachments ) ) {
-            foreach ( $attachments as $attachment ) {
+            foreach ( $attachments as $filename => $attachment ) {
+                    $filename = is_string( $filename ) ? $filename : '';
+
                     try {
-                            $phpmailer->addAttachment( $attachment );
+                            $phpmailer->addAttachment( $attachment, $filename );
                     } catch ( PHPMailer\PHPMailer\Exception $e ) {
                             continue;
                     }
