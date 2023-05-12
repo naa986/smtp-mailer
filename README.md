@@ -12,6 +12,7 @@
 * **SMTP Password**: The password to connect to your SMTP server.
 * **Type of Encryption**: The encryption to be used when sending an email (TLS/SSL/No Encryption. TLS is recommended).
 * **SMTP Port**: The port to be used when sending an email (587/465/25). If you choose TLS the port should be set to 587. For SSL use port 465 instead.
+* **SMTP Client Domain**: The fully-qualified domain name of the SMTP client, sent in the SMTP EHLO/HELO command. If left blank, the domain part of the From Address will be used.
 * **From Email Address**: The email address to be used as the From Address when sending an email.
 * **From Name**: The name to be used as the From Name when sending an email.
 
