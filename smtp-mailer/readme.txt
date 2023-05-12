@@ -4,7 +4,7 @@ Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
 Requires at least: 6.2
 Tested up to: 6.2
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,13 +24,14 @@ https://www.youtube.com/watch?v=7O_jgtykcEk&rel=0
 * **SMTP Password**: The password to connect to your SMTP server.
 * **Type of Encryption**: The encryption to be used when sending an email (TLS/SSL/No Encryption. TLS is recommended).
 * **SMTP Port**: The port to be used when sending an email (587/465/25). If you choose TLS the port should be set to 587. For SSL use port 465 instead.
+* **SMTP Client Domain**: The fully-qualified domain name of the SMTP client, sent in the SMTP EHLO/HELO command. If left blank, the domain part of the From Address will be used.
 * **From Email Address**: The email address to be used as the From Address when sending an email.
 * **From Name**: The name to be used as the From Name when sending an email.
 
 === SMTP Mailer Test Email ===
 
 Once you have configured the settings you can send a test email to check the functionality of the plugin.
- 
+
 * **To**: Email address of the recipient.
 * **Subject**: Subject of the email.
 * **Message**: Email body.
@@ -102,6 +103,9 @@ Yes.
 none
 
 == Changelog ==
+
+= 1.1.7 =
+* Added SMTP HELO client domain option.
 
 = 1.1.6 =
 * WordPress 6.2 compatibility update.

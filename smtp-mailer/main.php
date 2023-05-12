@@ -1,13 +1,13 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.6
+Version: 1.1.7
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
 Description: Configure a SMTP server to send email from your WordPress site
 Text Domain: smtp-mailer
-Domain Path: /languages 
+Domain Path: /languages
  */
 
 if (!defined('ABSPATH')){
@@ -15,12 +15,12 @@ if (!defined('ABSPATH')){
 }
 
 class SMTP_MAILER {
-    
-    var $plugin_version = '1.1.6';
+
+    var $plugin_version = '1.1.7';
     var $phpmailer_version = '6.7';
     var $plugin_url;
     var $plugin_path;
-    
+
     function __construct() {
         define('SMTP_MAILER_VERSION', $this->plugin_version);
         define('SMTP_MAILER_SITE_URL', site_url());
@@ -44,10 +44,10 @@ class SMTP_MAILER {
         add_action('admin_notices', 'smtp_mailer_admin_notice');
         add_filter('pre_wp_mail', 'smtp_mailer_pre_wp_mail', 10, 2);
     }
-    
+
     function plugins_loaded_handler()
     {
-        load_plugin_textdomain('smtp-mailer', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/'); 
+        load_plugin_textdomain('smtp-mailer', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
     }
 
     function plugin_url() {
@@ -68,7 +68,7 @@ class SMTP_MAILER {
         }
         return $links;
     }
-    
+
     function options_menu() {
         add_options_page(__('SMTP Mailer', 'smtp-mailer'), __('SMTP Mailer', 'smtp-mailer'), 'manage_options', 'smtp-mailer-settings', array($this, 'options_page'));
     }
@@ -121,7 +121,7 @@ class SMTP_MAILER {
         );
         echo wp_kses($content, $allowed_html_tags);
         if(!empty($action))
-        { 
+        {
             switch($action)
             {
                case 'test-email':
@@ -135,10 +135,10 @@ class SMTP_MAILER {
         else
         {
             $this->general_settings();
-        }        
+        }
         echo '</div>';
     }
-    
+
     function test_email_settings(){
         if(isset($_POST['smtp_mailer_send_test_email'])){
             $nonce = $_REQUEST['_wpnonce'];
@@ -157,7 +157,7 @@ class SMTP_MAILER {
             if(isset($_POST['smtp_mailer_email_body']) && !empty($_POST['smtp_mailer_email_body'])){
                 $message = sanitize_text_field($_POST['smtp_mailer_email_body']);
             }
-            wp_mail($to, $subject, $message);           
+            wp_mail($to, $subject, $message);
         }
         ?>
         <form method="post" action="">
@@ -191,10 +191,10 @@ class SMTP_MAILER {
 
             <p class="submit"><input type="submit" name="smtp_mailer_send_test_email" id="smtp_mailer_send_test_email" class="button button-primary" value="<?php _e('Send Email', 'smtp-mailer');?>"></p>
         </form>
-        
+
         <?php
-    }   
-    
+    }
+
     function server_info_settings()
     {
         $server_info = '';
@@ -207,7 +207,7 @@ class SMTP_MAILER {
         if(!extension_loaded('openssl') && !defined('OPENSSL_ALGO_SHA1')){
             $openssl_status = 'Not available';
             $openssl_text = ' (openssl extension is required in order to use any kind of encryption like TLS or SSL)';
-        }      
+        }
         $server_info .= sprintf('openssl: %s%s%s', $openssl_status, $openssl_text, PHP_EOL);
         $server_info .= sprintf('allow_url_fopen: %s%s', (ini_get('allow_url_fopen') ? 'Enabled' : 'Disabled'), PHP_EOL);
         $stream_socket_client_status = 'Not Available';
@@ -233,7 +233,7 @@ class SMTP_MAILER {
     }
 
     function general_settings() {
-        
+
         if (isset($_POST['smtp_mailer_update_settings'])) {
             $nonce = $_REQUEST['_wpnonce'];
             if (!wp_verify_nonce($nonce, 'smtp_mailer_general_settings')) {
@@ -253,7 +253,7 @@ class SMTP_MAILER {
             }
             $smtp_password = '';
             if(isset($_POST['smtp_password']) && !empty($_POST['smtp_password'])){
-                //echo "password: ".$_POST['smtp_password'];               
+                //echo "password: ".$_POST['smtp_password'];
                 $smtp_password = sanitize_text_field($_POST['smtp_password']);
                 $smtp_password = wp_unslash($smtp_password); // This removes slash (automatically added by WordPress) from the password when apostrophe is present
                 $smtp_password = base64_encode($smtp_password);
@@ -265,6 +265,10 @@ class SMTP_MAILER {
             $smtp_port = '';
             if(isset($_POST['smtp_port']) && !empty($_POST['smtp_port'])){
                 $smtp_port = sanitize_text_field($_POST['smtp_port']);
+            }
+            $smtp_helo = '';
+            if(isset($_POST['smtp_helo']) && !empty($_POST['smtp_helo'])){
+                $smtp_helo = sanitize_text_field($_POST['smtp_helo']);
             }
             $from_email = '';
             if(isset($_POST['from_email']) && !empty($_POST['from_email'])){
@@ -287,6 +291,7 @@ class SMTP_MAILER {
             }
             $options['type_of_encryption'] = $type_of_encryption;
             $options['smtp_port'] = $smtp_port;
+            $options['smtp_helo'] = $smtp_helo;
             $options['from_email'] = $from_email;
             $options['from_name'] = $from_name;
             $options['disable_ssl_verification'] = $disable_ssl_verification;
@@ -294,18 +299,18 @@ class SMTP_MAILER {
             echo '<div id="message" class="updated fade"><p><strong>';
             echo __('Settings Saved!', 'smtp-mailer');
             echo '</strong></p></div>';
-        }       
-        
+        }
+
         $options = smtp_mailer_get_option();
         if(!is_array($options)){
             $options = smtp_mailer_get_empty_options_array();
         }
-        
+
         // Avoid warning notice since this option was added later
         if(!isset($options['disable_ssl_verification'])){
             $options['disable_ssl_verification'] = '';
         }
-        
+
         ?>
 
         <form method="post" action="">
@@ -313,14 +318,14 @@ class SMTP_MAILER {
 
             <table class="form-table">
 
-                <tbody> 
-                    
+                <tbody>
+
                     <tr valign="top">
                         <th scope="row"><label for="smtp_host"><?php _e('SMTP Host', 'smtp-mailer');?></label></th>
                         <td><input name="smtp_host" type="text" id="smtp_host" value="<?php echo esc_attr($options['smtp_host']); ?>" class="regular-text code">
                             <p class="description"><?php _e('The SMTP server which will be used to send email. For example: smtp.gmail.com', 'smtp-mailer');?></p></td>
                     </tr>
-                    
+
                     <tr>
                     <th scope="row"><label for="smtp_auth"><?php _e('SMTP Authentication', 'smtp-mailer');?></label></th>
                     <td>
@@ -331,19 +336,19 @@ class SMTP_MAILER {
                         <p class="description"><?php _e('Whether to use SMTP Authentication when sending an email (recommended: True).', 'smtp-mailer');?></p>
                     </td>
                     </tr>
-                    
+
                     <tr valign="top">
                         <th scope="row"><label for="smtp_username"><?php _e('SMTP Username', 'smtp-mailer');?></label></th>
                         <td><input name="smtp_username" type="text" id="smtp_username" value="<?php echo esc_attr($options['smtp_username']); ?>" class="regular-text code">
                             <p class="description"><?php _e('Your SMTP Username.', 'smtp-mailer');?></p></td>
                     </tr>
-                    
+
                     <tr valign="top">
                         <th scope="row"><label for="smtp_password"><?php _e('SMTP Password', 'smtp-mailer');?></label></th>
                         <td><input name="smtp_password" type="password" id="smtp_password" value="" class="regular-text code">
                             <p class="description"><?php _e('Your SMTP Password (The saved password is not shown for security reasons. If you do not want to update the saved password, you can leave this field empty when updating other options).', 'smtp-mailer');?></p></td>
                     </tr>
-                    
+
                     <tr>
                     <th scope="row"><label for="type_of_encryption"><?php _e('Type of Encryption', 'smtp-mailer');?></label></th>
                     <td>
@@ -354,26 +359,32 @@ class SMTP_MAILER {
                         </select>
                         <p class="description"><?php _e('The encryption which will be used when sending an email (recommended: TLS).', 'smtp-mailer');?></p>
                     </td>
-                    </tr>                   
-                    
+                    </tr>
+
                     <tr valign="top">
                         <th scope="row"><label for="smtp_port"><?php _e('SMTP Port', 'smtp-mailer');?></label></th>
                         <td><input name="smtp_port" type="text" id="smtp_port" value="<?php echo esc_attr($options['smtp_port']); ?>" class="regular-text code">
                             <p class="description"><?php _e('The port which will be used when sending an email (587/465/25). If you choose TLS it should be set to 587. For SSL use port 465 instead.', 'smtp-mailer');?></p></td>
-                    </tr>                                      
-                    
+                    </tr>
+
+                    <tr valign="top">
+                        <th scope="row"><label for="smtp_helo"><?php _e('SMTP Client Domain', 'smtp-mailer');?></label></th>
+                        <td><input name="smtp_helo" type="text" id="smtp_helo" value="<?php echo esc_attr($options['smtp_helo']); ?>" class="regular-text code">
+                            <p class="description"><?php _e('The fully-qualified domain name of the SMTP client, sent in the SMTP EHLO/HELO command. If left blank, the domain part of the From Address will be used.', 'smtp-mailer');?></p></td>
+                    </tr>
+
                     <tr valign="top">
                         <th scope="row"><label for="from_email"><?php _e('From Email Address', 'smtp-mailer');?></label></th>
                         <td><input name="from_email" type="text" id="from_email" value="<?php echo esc_attr($options['from_email']); ?>" class="regular-text code">
                             <p class="description"><?php _e('The email address which will be used as the From Address if it is not supplied to the mail function.', 'smtp-mailer');?></p></td>
                     </tr>
-                    
+
                     <tr valign="top">
                         <th scope="row"><label for="from_name"><?php _e('From Name', 'smtp-mailer');?></label></th>
                         <td><input name="from_name" type="text" id="from_name" value="<?php echo esc_attr($options['from_name']); ?>" class="regular-text code">
                             <p class="description"><?php _e('The name which will be used as the From Name if it is not supplied to the mail function.', 'smtp-mailer');?></p></td>
                     </tr>
-                    
+
                     <tr valign="top">
                         <th scope="row"><label for="disable_ssl_verification"><?php _e('Disable SSL Certificate Verification', 'smtp-mailer');?></label></th>
                         <td><input name="disable_ssl_verification" type="checkbox" id="disable_ssl_verification" <?php checked($options['disable_ssl_verification'], 1); ?> value="1">
@@ -386,9 +397,9 @@ class SMTP_MAILER {
 
             <p class="submit"><input type="submit" name="smtp_mailer_update_settings" id="smtp_mailer_update_settings" class="button button-primary" value="<?php _e('Save Changes', 'smtp-mailer')?>"></p>
         </form>
-        
+
         <?php
-        }           
+        }
 }
 
 function smtp_mailer_get_option(){
@@ -418,13 +429,14 @@ function smtp_mailer_get_empty_options_array(){
     $options['smtp_password'] = '';
     $options['type_of_encryption'] = '';
     $options['smtp_port'] = '';
+    $options['smtp_helo'] = '';
     $options['from_email'] = '';
     $options['from_name'] = '';
     $options['disable_ssl_verification'] = '';
     return $options;
 }
 
-function smtp_mailer_admin_notice() {        
+function smtp_mailer_admin_notice() {
     if(!is_smtp_mailer_configured()){
         ?>
         <div class="error">
@@ -457,6 +469,7 @@ function is_smtp_mailer_configured() {
     if(!isset($options['smtp_port']) || empty($options['smtp_port'])){
         $smtp_configured = false;
     }
+    // The 'smtp_helo' option is not required.
     if(!isset($options['from_email']) || empty($options['from_email'])){
         $smtp_configured = false;
     }
@@ -496,9 +509,9 @@ function smtp_mailer_pre_wp_mail($null, $atts)
                     $attachments = explode( "\n", str_replace( "\r\n", "\n", $attachments ) );
             }
     }
-    
+
     $options = smtp_mailer_get_option();
-    
+
     global $phpmailer;
 
     // (Re)create it, if it's gone missing.
@@ -625,6 +638,8 @@ function smtp_mailer_pre_wp_mail($null, $atts)
      * another option, but some hosts may refuse to relay mail from an unknown domain.
      * See https://core.trac.wordpress.org/ticket/5007.
      */
+
+
     if ( ! isset( $from_email ) ) {
             // Get the site domain and get rid of www.
             $sitename   = wp_parse_url( network_home_url(), PHP_URL_HOST );
@@ -668,6 +683,16 @@ function smtp_mailer_pre_wp_mail($null, $atts)
             do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_error_data ) );
 
             return false;
+    }
+
+    /**
+     * Set the SMTP Client Domain if supplied. Otherwise get it from the
+     * domain part of the "from" email address.
+     */
+    if ( isset($options['smtp_helo'] ) && ! empty( $options['smtp_helo'] ) ) {
+        $phpmailer->Helo = $options['smtp_helo'];
+    } else if ( filter_var( $from_email, FILTER_VALIDATE_EMAIL ) ) {
+        $phpmailer->Helo = explode( '@', $from_email )[1];
     }
 
     // Set mail's subject and body.
@@ -724,16 +749,16 @@ function smtp_mailer_pre_wp_mail($null, $atts)
         // SMTP username
         $phpmailer->Username = $options['smtp_username'];
         // SMTP password
-        $phpmailer->Password = base64_decode($options['smtp_password']);  
+        $phpmailer->Password = base64_decode($options['smtp_password']);
     }
     // Whether to use encryption
     $type_of_encryption = $options['type_of_encryption'];
     if($type_of_encryption=="none"){
-        $type_of_encryption = '';  
+        $type_of_encryption = '';
     }
     $phpmailer->SMTPSecure = $type_of_encryption;
     // SMTP port
-    $phpmailer->Port = $options['smtp_port'];  
+    $phpmailer->Port = $options['smtp_port'];
 
     // Whether to enable TLS encryption automatically if a server supports it
     $phpmailer->SMTPAutoTLS = false;
