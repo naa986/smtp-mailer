@@ -56,42 +56,7 @@ For detailed setup instructions please visit the [SMTP Mailer](https://wphowto.n
 1. Click "Install Now" and then hit the activate button
 
 == Frequently Asked Questions ==
-
-= Can I send email via SMTP from my website using this plugin? =
-
-Yes.
-
-= Can I use this plugin with Gmail SMTP? =
-
-Yes.
-
-= Can I use this plugin on any SMTP port? =
-
-Yes.
-
-= Can I use this plugin with Sendinblue SMTP? =
-
-Yes.
-
-= Can I use this plugin with Mailgun SMTP? =
-
-Yes.
-
-= Can I use this plugin with SendGrid SMTP? =
-
-Yes.
-
-= Can I use this plugin with Postmark SMTP? =
-
-Yes.
-
-= Can I use this plugin with Office365 SMTP? =
-
-Yes.
-
-= Can I use this plugin with ZohoMail SMTP? =
-
-Yes.
+none
 
 == Screenshots ==
 
