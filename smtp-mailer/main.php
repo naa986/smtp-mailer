@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.9
+Version: 1.1.10
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.9';
+    var $plugin_version = '1.1.10';
     var $phpmailer_version = '6.8.0';
     var $plugin_url;
     var $plugin_path;
@@ -274,6 +274,10 @@ class SMTP_MAILER {
             if(isset($_POST['from_name']) && !empty($_POST['from_name'])){
                 $from_name = sanitize_text_field(stripslashes($_POST['from_name']));
             }
+            $force_from_address = '';
+            if(isset($_POST['force_from_address']) && !empty($_POST['force_from_address'])){
+                $force_from_address = sanitize_text_field($_POST['force_from_address']);
+            }
             $disable_ssl_verification = '';
             if(isset($_POST['disable_ssl_verification']) && !empty($_POST['disable_ssl_verification'])){
                 $disable_ssl_verification = sanitize_text_field($_POST['disable_ssl_verification']);
@@ -289,6 +293,7 @@ class SMTP_MAILER {
             $options['smtp_port'] = $smtp_port;
             $options['from_email'] = $from_email;
             $options['from_name'] = $from_name;
+            $options['force_from_address'] = $force_from_address;
             $options['disable_ssl_verification'] = $disable_ssl_verification;
             smtp_mailer_update_option($options);
             echo '<div id="message" class="updated fade"><p><strong>';
@@ -299,6 +304,11 @@ class SMTP_MAILER {
         $options = smtp_mailer_get_option();
         if(!is_array($options)){
             $options = smtp_mailer_get_empty_options_array();
+        }
+        
+        // Avoid warning notice since this option was added later
+        if(!isset($options['force_from_address'])){
+            $options['force_from_address'] = '';
         }
         
         // Avoid warning notice since this option was added later
@@ -375,6 +385,12 @@ class SMTP_MAILER {
                     </tr>
                     
                     <tr valign="top">
+                        <th scope="row"><label for="force_from_address"><?php _e('Force From Address', 'smtp-mailer');?></label></th>
+                        <td><input name="force_from_address" type="checkbox" id="force_from_address" <?php checked($options['force_from_address'], 1); ?> value="1">
+                            <p class="description"><?php _e('The From address in the settings will be set for all outgoing email messages.', 'smtp-mailer');?></p></td>
+                    </tr>
+                    
+                    <tr valign="top">
                         <th scope="row"><label for="disable_ssl_verification"><?php _e('Disable SSL Certificate Verification', 'smtp-mailer');?></label></th>
                         <td><input name="disable_ssl_verification" type="checkbox" id="disable_ssl_verification" <?php checked($options['disable_ssl_verification'], 1); ?> value="1">
                             <p class="description"><?php _e('As of PHP 5.6 you will get a warning/error if the SSL certificate on the server is not properly configured. You can check this option to disable that default behaviour. Please note that PHP 5.6 made this change for a good reason. So you should get your host to fix the SSL configurations instead of bypassing it', 'smtp-mailer');?></p></td>
@@ -420,6 +436,7 @@ function smtp_mailer_get_empty_options_array(){
     $options['smtp_port'] = '';
     $options['from_email'] = '';
     $options['from_name'] = '';
+    $options['force_from_address'] = '';
     $options['disable_ssl_verification'] = '';
     return $options;
 }
@@ -659,7 +676,11 @@ function smtp_mailer_pre_wp_mail($null, $atts)
      * @param string $from_name Name associated with the "from" email address.
      */
     $from_name = apply_filters( 'wp_mail_from_name', $from_name );
-
+    //force from address if checked
+    if(isset($options['force_from_address']) && !empty($options['force_from_address'])){
+        $from_name = $options['from_name'];
+        $from_email = $options['from_email'];
+    }
     try {
             $phpmailer->setFrom( $from_email, $from_name, false );
     } catch ( PHPMailer\PHPMailer\Exception $e ) {
