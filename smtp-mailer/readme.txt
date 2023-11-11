@@ -2,9 +2,9 @@
 Contributors: naa986
 Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
-Requires at least: 6.3
-Tested up to: 6.3
-Stable tag: 1.1.10
+Requires at least: 6.4
+Tested up to: 6.4
+Stable tag: 1.1.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,9 @@ none
 none
 
 == Changelog ==
+
+= 1.1.11 =
+* WordPress 6.4 compatibility update.
 
 = 1.1.10 =
 * Added an option to set the configured from address for all outgoing email messages.
