@@ -4,7 +4,7 @@ Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
 Requires at least: 6.4
 Tested up to: 6.4
-Stable tag: 1.1.11
+Stable tag: 1.1.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,10 @@ Configure a SMTP server to send email from your WordPress site. Configure the wp
 [SMTP Mailer](https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482) plugin allows you to configure a mail server which handles all outgoing email from your website. It takes control of the wp_mail function and use SMTP instead.
 
 https://www.youtube.com/watch?v=7O_jgtykcEk&rel=0
+
+=== SMTP Mailer Add-ons ===
+
+* [Reply-To](https://wphowto.net/how-to-add-a-reply-to-address-in-the-smtp-mailer-wordpress-plugin-6997)
 
 === SMTP Mailer Settings ===
 
@@ -67,6 +71,9 @@ none
 none
 
 == Changelog ==
+
+= 1.1.12 =
+* Added support for the reply-to add-on.
 
 = 1.1.11 =
 * WordPress 6.4 compatibility update.

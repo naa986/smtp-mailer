@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.11
+Version: 1.1.12
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.11';
+    var $plugin_version = '1.1.12';
     var $phpmailer_version = '6.8.1';
     var $plugin_url;
     var $plugin_path;
@@ -36,10 +36,22 @@ class SMTP_MAILER {
     }
 
     function loader_operations() {
+        if (is_admin()) {
+            include_once('addons/smtp-mailer-addons.php');
+        }
         add_action('plugins_loaded', array($this, 'plugins_loaded_handler'));
         add_action('admin_menu', array($this, 'options_menu'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         //add_action('admin_notices', 'smtp_mailer_admin_notice');
         add_filter('pre_wp_mail', 'smtp_mailer_pre_wp_mail', 10, 2);
+    }
+    
+    function enqueue_admin_scripts($hook) {
+        if('settings_page_smtp-mailer-settings' != $hook) {
+            return;
+        }
+        wp_register_style('smtp-mailer-addons-menu', SMTP_MAILER_URL.'/addons/smtp-mailer-addons.css');
+        wp_enqueue_style('smtp-mailer-addons-menu');
     }
     
     function plugins_loaded_handler()
@@ -78,6 +90,8 @@ class SMTP_MAILER {
             'smtp-mailer-settings' => __('General', 'smtp-mailer'),
             'smtp-mailer-settings&action=test-email' => __('Test Email', 'smtp-mailer'),
             'smtp-mailer-settings&action=server-info' => __('Server Info', 'smtp-mailer'),
+            'smtp-mailer-settings&action=addons' => __('Add-ons', 'smtp-mailer'),
+            'smtp-mailer-settings&action=advanced' => __('Advanced', 'smtp-mailer'),
         );
         $url = "https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482";
         $link_text = sprintf(__('Please visit the <a target="_blank" href="%s">SMTP Mailer</a> documentation page for usage instructions.', 'smtp-mailer'), esc_url($url));
@@ -129,6 +143,12 @@ class SMTP_MAILER {
                    break;
                case 'server-info':
                    $this->server_info_settings();
+                   break;
+               case 'addons':
+                   smtp_mailer_display_addons();
+                   break;
+               case 'advanced':
+                   $this->advanced_settings();
                    break;
             }
         }
@@ -404,7 +424,47 @@ class SMTP_MAILER {
         </form>
         
         <?php
-        }           
+        }
+        
+        function advanced_settings() {
+            ?>
+            <div class="update-nag"><?php _e('Settings from add-ons will appear here.', 'smtp-mailer');?></div>
+            <?php        
+            if (isset($_POST['smtp_mailer_update_advanced_settings'])) {
+                $nonce = $_REQUEST['_wpnonce'];
+                if (!wp_verify_nonce($nonce, 'smtp_mailer_advanced_settings')) {
+                    wp_die('Error! Nonce Security Check Failed! please save the settings again.');
+                }
+                $post = $_POST;
+                do_action('smtp_mailer_advanced_settings_submitted', $post);
+                echo '<div id="message" class="updated fade"><p><strong>';
+                echo __('Settings Saved!', 'smtp-mailer');
+                echo '</strong></p></div>';
+            }
+            $settings_fields = '';
+            $settings_fields = apply_filters('smtp_mailer_advanced_settings_fields', $settings_fields);
+            if(empty($settings_fields)){
+                return;
+            }
+            ?>
+            <form method="post" action="">
+                <?php wp_nonce_field('smtp_mailer_advanced_settings'); ?>
+
+                <table class="form-table">
+                    <tbody>                                    
+                        <?php
+                        if(!empty($settings_fields)){
+                            echo $settings_fields;
+                        }
+                        ?>
+                    </tbody>
+
+                </table>
+
+                <p class="submit"><input type="submit" name="smtp_mailer_update_advanced_settings" id="smtp_mailer_update_advanced_settings" class="button button-primary" value="<?php _e('Save Changes', 'smtp-mailer');?>"></p>
+            </form>
+            <?php
+        }
 }
 
 function smtp_mailer_get_option(){
@@ -692,7 +752,18 @@ function smtp_mailer_pre_wp_mail($null, $atts)
 
             return false;
     }
-
+    /*reply_to code */
+    $smtpmailer_reply_to = '';
+    $smtpmailer_reply_to = apply_filters('smtpmailer_reply_to', $smtpmailer_reply_to);
+    if(isset($smtpmailer_reply_to) && !empty($smtpmailer_reply_to)){
+        $temp_reply_to_addresses = explode(",", $smtpmailer_reply_to);
+        $reply_to = array();
+        foreach($temp_reply_to_addresses as $temp_reply_to_address){
+            $reply_to_address = trim($temp_reply_to_address);
+            $reply_to[] = $reply_to_address;
+        }
+    }
+    /*end of reply_to code */
     // Set mail's subject and body.
     $phpmailer->Subject = $subject;
     $phpmailer->Body    = $message;
