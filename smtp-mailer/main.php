@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.12
+Version: 1.1.13
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,8 +16,8 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.12';
-    var $phpmailer_version = '6.8.1';
+    var $plugin_version = '1.1.13';
+    var $phpmailer_version = '6.9.1';
     var $plugin_url;
     var $plugin_path;
     
