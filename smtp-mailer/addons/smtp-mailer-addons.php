@@ -16,6 +16,14 @@ function smtp_mailer_display_addons()
     );
     array_push($addons_data, $addon_1);
     
+    $addon_2 = array(
+        'name' => 'Email Logger',
+        'thumbnail' => SMTP_MAILER_URL.'/addons/images/smtp-mailer-email-logger.png',
+        'description' => 'Log and view all email messages',
+        'page_url' => 'https://wphowto.net/smtp-mailer-email-logger-7066',
+    );
+    array_push($addons_data, $addon_2);
+    
     //Display the list
     foreach ($addons_data as $addon) {
         ?>
