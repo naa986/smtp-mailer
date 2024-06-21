@@ -4,7 +4,7 @@ Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
 Requires at least: 6.5
 Tested up to: 6.5
-Stable tag: 1.1.14
+Stable tag: 1.1.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,9 @@ none
 none
 
 == Changelog ==
+
+= 1.1.15 =
+* Updated the code for sanitizing password.
 
 = 1.1.14 =
 * Added support for the email logger add-on.

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.14
+Version: 1.1.15
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.14';
+    var $plugin_version = '1.1.15';
     var $phpmailer_version = '6.9.1';
     var $plugin_url;
     var $plugin_path;
@@ -273,8 +273,8 @@ class SMTP_MAILER {
             }
             $smtp_password = '';
             if(isset($_POST['smtp_password']) && !empty($_POST['smtp_password'])){
-                //echo "password: ".$_POST['smtp_password'];               
-                $smtp_password = sanitize_text_field($_POST['smtp_password']);
+                //echo "password: ".$_POST['smtp_password'].'<br>';               
+                $smtp_password = trim($_POST['smtp_password']);
                 $smtp_password = wp_unslash($smtp_password); // This removes slash (automatically added by WordPress) from the password when apostrophe is present
                 $smtp_password = base64_encode($smtp_password);
             }
