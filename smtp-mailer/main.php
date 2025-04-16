@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.17
+Version: 1.1.18
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,8 +16,8 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.17';
-    var $phpmailer_version = '6.9.2';
+    var $plugin_version = '1.1.18';
+    var $phpmailer_version = '6.9.3';
     var $plugin_url;
     var $plugin_path;
     
@@ -583,7 +583,8 @@ function smtp_mailer_pre_wp_mail($null, $atts)
             require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
             require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
             require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
-            $phpmailer = new PHPMailer\PHPMailer\PHPMailer( true );
+            require_once ABSPATH . WPINC . '/class-wp-phpmailer.php';
+            $phpmailer = new WP_PHPMailer( true );
 
             $phpmailer::$validator = static function ( $email ) {
                     return (bool) is_email( $email );
