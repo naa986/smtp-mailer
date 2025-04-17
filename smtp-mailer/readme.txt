@@ -2,7 +2,7 @@
 Contributors: naa986
 Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
-Requires at least: 6.5
+Requires at least: 6.8
 Tested up to: 6.8
 Stable tag: 1.1.18
 License: GPLv2 or later
