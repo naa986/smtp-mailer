@@ -2,10 +2,9 @@
 
 function smtp_mailer_display_addons()
 {
-    /*
     echo '<div class="wrap">';
     echo '<h2>' .__('SMTP Mailer Add-ons', 'smtp-mailer') . '</h2>';
-    */
+    
     $addons_data = array();
 
     $addon_1 = array(
