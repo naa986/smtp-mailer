@@ -4,7 +4,7 @@ Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
 Requires at least: 6.8
 Tested up to: 6.8
-Stable tag: 1.1.19
+Stable tag: 1.1.20
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,8 +13,6 @@ Configure a SMTP server to send email from your WordPress site. Configure the wp
 == Description ==
 
 [SMTP Mailer](https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482) plugin allows you to configure a mail server which handles all outgoing email from your website. It takes control of the wp_mail function and use SMTP instead.
-
-https://www.youtube.com/watch?v=PzbFpxyex3g&rel=0
 
 === SMTP Mailer Add-ons ===
 
@@ -72,6 +70,9 @@ none
 none
 
 == Changelog ==
+
+= 1.1.20 =
+* Restored older settings.
 
 = 1.1.19 =
 * Added a menu for easy configuration.

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.19
+Version: 1.1.20
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.19';
+    var $plugin_version = '1.1.20';
     var $phpmailer_version = '6.9.3';
     var $plugin_url;
     var $plugin_path;
@@ -40,14 +40,14 @@ class SMTP_MAILER {
             include_once('addons/smtp-mailer-addons.php');
         }
         add_action('plugins_loaded', array($this, 'plugins_loaded_handler'));
-        add_action('admin_menu', array($this, 'plugin_menu'));
+        add_action('admin_menu', array($this, 'options_menu'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         //add_action('admin_notices', 'smtp_mailer_admin_notice');
         add_filter('pre_wp_mail', 'smtp_mailer_pre_wp_mail', 10, 2);
     }
     
     function enqueue_admin_scripts($hook) {
-        if('toplevel_page_smtp-mailer' != $hook) {
+        if('settings_page_smtp-mailer-settings' != $hook) {
             return;
         }
         wp_register_style('smtp-mailer-addons-menu', SMTP_MAILER_URL.'/addons/smtp-mailer-addons.css');
@@ -78,27 +78,25 @@ class SMTP_MAILER {
 
     function add_plugin_action_links($links, $file) {
         if ($file == plugin_basename(dirname(__FILE__) . '/main.php')) {
-            $links[] = '<a href="admin.php?page=smtp-mailer-settings">'.__('Settings', 'smtp-mailer').'</a>';
+            $links[] = '<a href="options-general.php?page=smtp-mailer-settings">'.__('Settings', 'smtp-mailer').'</a>';
         }
         return $links;
     }
     
-    function plugin_menu() {
-        $menu_slug = 'smtp-mailer';
-        add_menu_page(__('SMTP Mailer', 'smtp-mailer'), __('SMTP Mailer', 'smtp-mailer'), 'manage_options', $menu_slug, '', 'dashicons-email');
-        add_submenu_page($menu_slug, __('Add-ons', 'smtp-mailer'), __('Add-ons', 'smtp-mailer'), 'manage_options', $menu_slug, 'smtp_mailer_display_addons');
-        add_submenu_page($menu_slug, __('Settings', 'smtp-mailer'), __('Settings', 'smtp-mailer'), 'manage_options', 'smtp-mailer-settings', array($this, 'settings_page'));
+    function options_menu() {
+        add_options_page(__('SMTP Mailer', 'smtp-mailer'), __('SMTP Mailer', 'smtp-mailer'), 'manage_options', 'smtp-mailer-settings', array($this, 'options_page'));
     }
     
-    function settings_page() {
+    function options_page() {
         $plugin_tabs = array(
             'smtp-mailer-settings' => __('General', 'smtp-mailer'),
             'smtp-mailer-settings&action=test-email' => __('Test Email', 'smtp-mailer'),
             'smtp-mailer-settings&action=server-info' => __('Server Info', 'smtp-mailer'),
-            'smtp-mailer-settings&action=advanced' => __('Advanced', 'smtp-mailer')
+            'smtp-mailer-settings&action=addons' => __('Add-ons', 'smtp-mailer'),
+            'smtp-mailer-settings&action=advanced' => __('Advanced', 'smtp-mailer'),
         );
         $url = "https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482";
-        $link_text = sprintf(__('Please visit the <a target="_blank" href="%s">SMTP Mailer</a> documentation page for usage instructions.', 'smtp-mailer'), esc_url($url));
+        $link_text = sprintf(__('Please visit the <a target="_blank" href="%s">SMTP Mailer</a> documentation page for setup instructions.', 'smtp-mailer'), esc_url($url));
         $allowed_html_tags = array(
             'a' => array(
                 'href' => array(),
@@ -147,6 +145,9 @@ class SMTP_MAILER {
                    break;
                case 'server-info':
                    $this->server_info_settings();
+                   break;
+               case 'addons':
+                   smtp_mailer_display_addons();
                    break;
                case 'advanced':
                    $this->advanced_settings();
