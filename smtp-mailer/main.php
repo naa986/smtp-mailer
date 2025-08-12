@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.20
+Version: 1.1.21
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.20';
+    var $plugin_version = '1.1.21';
     var $phpmailer_version = '6.9.3';
     var $plugin_url;
     var $plugin_path;
@@ -321,7 +321,16 @@ class SMTP_MAILER {
             echo '<div id="message" class="updated fade"><p><strong>';
             echo __('Settings Saved!', 'smtp-mailer');
             echo '</strong></p></div>';
-        }       
+        }
+        //
+        if (isset($_POST['smtp_mailer_delete_options'])) {
+            if(check_admin_referer('smtp_mailer_delete_options', 'smtp_mailer_delete_options_nonce')) {
+                delete_option('smtp_mailer_options');
+                echo '<div id="message" class="updated fade"><p><strong>';
+                echo __('Options deleted!', 'smtp-mailer');
+                echo '</strong></p></div>';
+            }
+        }
         
         $options = smtp_mailer_get_option();
         if(!is_array($options)){
@@ -423,6 +432,10 @@ class SMTP_MAILER {
             </table>
 
             <p class="submit"><input type="submit" name="smtp_mailer_update_settings" id="smtp_mailer_update_settings" class="button button-primary" value="<?php _e('Save Changes', 'smtp-mailer')?>"></p>
+        </form>
+        <form method="post" onsubmit="return confirm('Are you sure you want to delete saved options and start fresh?');">
+            <?php wp_nonce_field('smtp_mailer_delete_options', 'smtp_mailer_delete_options_nonce'); ?>
+            <p class="submit"><input type="submit" name="smtp_mailer_delete_options" id="smtp_mailer_delete_options" class="button" value="<?php _e('Delete Saved Options', 'smtp-mailer')?>"></p>
         </form>
         
         <?php
