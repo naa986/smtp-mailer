@@ -1,7 +1,8 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.21
+Version: 1.1.22
+Requires at least: 6.8
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/

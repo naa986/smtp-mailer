@@ -4,7 +4,7 @@ Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
 Requires at least: 6.8
 Tested up to: 6.8
-Stable tag: 1.1.21
+Stable tag: 1.1.22
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,9 @@ none
 none
 
 == Changelog ==
+
+= 1.1.22 =
+* Added minimum WordPress requirements to main file.
 
 = 1.1.21 =
 * Added an option to delete saved options.
