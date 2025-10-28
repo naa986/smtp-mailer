@@ -4,7 +4,7 @@ Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
 Requires at least: 6.8
 Tested up to: 6.8
-Stable tag: 1.1.22
+Stable tag: 1.1.23
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,8 +27,12 @@ Configure a SMTP server to send email from your WordPress site. Configure the wp
 * **SMTP Password**: The password to connect to your SMTP server.
 * **Type of Encryption**: The encryption to be used when sending an email (TLS/SSL/No Encryption. TLS is recommended).
 * **SMTP Port**: The port to be used when sending an email (587/465/25). If you choose TLS the port should be set to 587. For SSL use port 465 instead.
-* **From Email Address**: The email address to be used as the From Address when sending an email.
-* **From Name**: The name to be used as the From Name when sending an email.
+* **From Email Address**: The email address to be used as the From Email when sending a test email.
+* **From Name**: The name to be used as the From Name when sending a test email.
+* **Force From Name**: The From name in the settings is set for all outgoing email messages.
+* **Force From Email**: The From email in the settings is set for all outgoing email messages.
+* **Force From Address**: The From address in the settings is set for all outgoing email messages.
+* **Disable SSL Certificate Verification**: As of PHP 5.6 a warning/error is shown if the SSL certificate on the server is not properly configured. This option lets you disable that behaviour.
 
 === SMTP Mailer Test Email ===
 
@@ -70,6 +74,9 @@ none
 none
 
 == Changelog ==
+
+= 1.1.23 =
+* Added options to force from name and from email.
 
 = 1.1.22 =
 * Added minimum WordPress requirements to main file.

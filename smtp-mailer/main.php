@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.22
+Version: 1.1.23
 Requires at least: 6.8
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.21';
+    var $plugin_version = '1.1.23';
     var $phpmailer_version = '6.9.3';
     var $plugin_url;
     var $plugin_path;
@@ -297,6 +297,14 @@ class SMTP_MAILER {
             if(isset($_POST['from_name']) && !empty($_POST['from_name'])){
                 $from_name = sanitize_text_field(stripslashes($_POST['from_name']));
             }
+            $force_from_name = '';
+            if(isset($_POST['force_from_name']) && !empty($_POST['force_from_name'])){
+                $force_from_name = sanitize_text_field($_POST['force_from_name']);
+            }
+            $force_from_email = '';
+            if(isset($_POST['force_from_email']) && !empty($_POST['force_from_email'])){
+                $force_from_email = sanitize_text_field($_POST['force_from_email']);
+            }
             $force_from_address = '';
             if(isset($_POST['force_from_address']) && !empty($_POST['force_from_address'])){
                 $force_from_address = sanitize_text_field($_POST['force_from_address']);
@@ -316,6 +324,8 @@ class SMTP_MAILER {
             $options['smtp_port'] = $smtp_port;
             $options['from_email'] = $from_email;
             $options['from_name'] = $from_name;
+            $options['force_from_name'] = $force_from_name;
+            $options['force_from_email'] = $force_from_email;
             $options['force_from_address'] = $force_from_address;
             $options['disable_ssl_verification'] = $disable_ssl_verification;
             smtp_mailer_update_option($options);
@@ -336,6 +346,16 @@ class SMTP_MAILER {
         $options = smtp_mailer_get_option();
         if(!is_array($options)){
             $options = smtp_mailer_get_empty_options_array();
+        }
+        
+        // Avoid warning notice since this option was added later
+        if(!isset($options['force_from_name'])){
+            $options['force_from_name'] = '';
+        }
+        
+        // Avoid warning notice since this option was added later
+        if(!isset($options['force_from_email'])){
+            $options['force_from_email'] = '';
         }
         
         // Avoid warning notice since this option was added later
@@ -414,6 +434,18 @@ class SMTP_MAILER {
                         <th scope="row"><label for="from_name"><?php _e('From Name', 'smtp-mailer');?></label></th>
                         <td><input name="from_name" type="text" id="from_name" value="<?php echo esc_attr($options['from_name']); ?>" class="regular-text code">
                             <p class="description"><?php _e('The name which will be used as the From Name if it is not supplied to the mail function.', 'smtp-mailer');?></p></td>
+                    </tr>
+                    
+                    <tr valign="top">
+                        <th scope="row"><label for="force_from_name"><?php _e('Force From Name', 'smtp-mailer');?></label></th>
+                        <td><input name="force_from_name" type="checkbox" id="force_from_name" <?php checked($options['force_from_name'], 1); ?> value="1">
+                            <p class="description"><?php _e('The From name in the settings will be set for all outgoing email messages.', 'smtp-mailer');?></p></td>
+                    </tr>
+                    
+                    <tr valign="top">
+                        <th scope="row"><label for="force_from_email"><?php _e('Force From Email', 'smtp-mailer');?></label></th>
+                        <td><input name="force_from_email" type="checkbox" id="force_from_email" <?php checked($options['force_from_email'], 1); ?> value="1">
+                            <p class="description"><?php _e('The From email in the settings will be set for all outgoing email messages.', 'smtp-mailer');?></p></td>
                     </tr>
                     
                     <tr valign="top">
@@ -512,6 +544,8 @@ function smtp_mailer_get_empty_options_array(){
     $options['smtp_port'] = '';
     $options['from_email'] = '';
     $options['from_name'] = '';
+    $options['force_from_name'] = '';
+    $options['force_from_email'] = '';
     $options['force_from_address'] = '';
     $options['disable_ssl_verification'] = '';
     return $options;
@@ -753,6 +787,14 @@ function smtp_mailer_pre_wp_mail($null, $atts)
      * @param string $from_name Name associated with the "from" email address.
      */
     $from_name = apply_filters( 'wp_mail_from_name', $from_name );
+    //force from name if checked
+    if(isset($options['force_from_name']) && !empty($options['force_from_name'])){
+        $from_name = $options['from_name'];
+    }
+    //force from email if checked
+    if(isset($options['force_from_email']) && !empty($options['force_from_email'])){
+        $from_email = $options['from_email'];
+    }
     //force from address if checked
     if(isset($options['force_from_address']) && !empty($options['force_from_address'])){
         $from_name = $options['from_name'];
