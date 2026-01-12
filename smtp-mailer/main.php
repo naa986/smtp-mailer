@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.23
-Requires at least: 6.8
+Version: 1.1.24
+Requires at least: 6.9
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -17,8 +17,8 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.23';
-    var $phpmailer_version = '6.9.3';
+    var $plugin_version = '1.1.24';
+    var $phpmailer_version = '7.0.0';
     var $plugin_url;
     var $plugin_path;
     
@@ -624,6 +624,13 @@ function smtp_mailer_pre_wp_mail($null, $atts)
             }
     }
     
+    if ( isset( $atts['embeds'] ) ) {
+            $embeds = $atts['embeds'];
+            if ( ! is_array( $embeds ) ) {
+                    $embeds = explode( "\n", str_replace( "\r\n", "\n", $embeds ) );
+            }
+    }
+    
     $options = smtp_mailer_get_option();
     
     global $phpmailer;
@@ -708,6 +715,9 @@ function smtp_mailer_pre_wp_mail($null, $atts)
                                                     } elseif ( false !== stripos( $charset_content, 'boundary=' ) ) {
                                                             $boundary = trim( str_replace( array( 'BOUNDARY=', 'boundary=', '"' ), '', $charset_content ) );
                                                             $charset  = '';
+                                                            if ( preg_match( '~^multipart/(\S+)~', $content_type, $matches ) ) {
+                                                                    $content_type = 'multipart/' . strtolower( $matches[1] ) . '; boundary="' . $boundary . '"';
+                                                            }
                                                     }
 
                                                     // Avoid setting an empty $content_type.
@@ -741,6 +751,15 @@ function smtp_mailer_pre_wp_mail($null, $atts)
     $phpmailer->Body    = '';
     $phpmailer->AltBody = '';
 
+    /*
+     * Reset encoding to 8-bit, as it may have been automatically downgraded
+     * to 7-bit by PHPMailer (based on the body contents) in a previous call
+     * to wp_mail().
+     *
+     * See https://core.trac.wordpress.org/ticket/33972
+     */
+    $phpmailer->Encoding = PHPMailer\PHPMailer\PHPMailer::ENCODING_8BIT;    
+    
     // Set "From" name and email.
 
     // If we don't have a name from the input headers.
@@ -801,7 +820,7 @@ function smtp_mailer_pre_wp_mail($null, $atts)
         $from_email = $options['from_email'];
     }
     try {
-            $phpmailer->setFrom( $from_email, $from_name, false );
+            $phpmailer->setFrom( $from_email, $from_name );
     } catch ( PHPMailer\PHPMailer\Exception $e ) {
             $mail_error_data                             = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
             $mail_error_data['phpmailer_exception_code'] = $e->getCode();
@@ -852,10 +871,10 @@ function smtp_mailer_pre_wp_mail($null, $atts)
                                             $phpmailer->addAddress( $address, $recipient_name );
                                             break;
                                     case 'cc':
-                                            $phpmailer->addCc( $address, $recipient_name );
+                                            $phpmailer->addCC( $address, $recipient_name );
                                             break;
                                     case 'bcc':
-                                            $phpmailer->addBcc( $address, $recipient_name );
+                                            $phpmailer->addBCC( $address, $recipient_name );
                                             break;
                                     case 'reply_to':
                                             $phpmailer->addReplyTo( $address, $recipient_name );
@@ -956,10 +975,6 @@ function smtp_mailer_pre_wp_mail($null, $atts)
                             }
                     }
             }
-
-            if ( false !== stripos( $content_type, 'multipart' ) && ! empty( $boundary ) ) {
-                    $phpmailer->addCustomHeader( sprintf( 'Content-Type: %s; boundary="%s"', $content_type, $boundary ) );
-            }
     }
 
     if ( isset( $attachments ) && ! empty( $attachments ) ) {
@@ -968,6 +983,50 @@ function smtp_mailer_pre_wp_mail($null, $atts)
 
                     try {
                             $phpmailer->addAttachment( $attachment, $filename );
+                    } catch ( PHPMailer\PHPMailer\Exception $e ) {
+                            continue;
+                    }
+            }
+    }
+    
+    if ( isset( $embeds ) && ! empty( $embeds ) ) {
+            foreach ( $embeds as $key => $embed_path ) {
+                    /**
+                     * Filters the arguments for PHPMailer's addEmbeddedImage() method.
+                     *
+                     * @since 6.9.0
+                     *
+                     * @param array $args {
+                     *     An array of arguments for `addEmbeddedImage()`.
+                     *     @type string $path        The path to the file.
+                     *     @type string $cid         The Content-ID of the image. Default: The key in the embeds array.
+                     *     @type string $name        The filename of the image.
+                     *     @type string $encoding    The encoding of the image. Default: 'base64'.
+                     *     @type string $type        The MIME type of the image. Default: empty string, which lets PHPMailer auto-detect.
+                     *     @type string $disposition The disposition of the image. Default: 'inline'.
+                     * }
+                     */
+                    $embed_args = apply_filters(
+                            'wp_mail_embed_args',
+                            array(
+                                    'path'        => $embed_path,
+                                    'cid'         => (string) $key,
+                                    'name'        => basename( $embed_path ),
+                                    'encoding'    => 'base64',
+                                    'type'        => '',
+                                    'disposition' => 'inline',
+                            )
+                    );
+
+                    try {
+                            $phpmailer->addEmbeddedImage(
+                                    $embed_args['path'],
+                                    $embed_args['cid'],
+                                    $embed_args['name'],
+                                    $embed_args['encoding'],
+                                    $embed_args['type'],
+                                    $embed_args['disposition']
+                            );
                     } catch ( PHPMailer\PHPMailer\Exception $e ) {
                             continue;
                     }
@@ -1006,6 +1065,7 @@ function smtp_mailer_pre_wp_mail($null, $atts)
              *     @type string   $message     Message contents.
              *     @type string[] $headers     Additional headers.
              *     @type string[] $attachments Paths to files to attach.
+             *     @type string[] $embeds      Paths to files to embed.
              * }
              */
             do_action( 'wp_mail_succeeded', $mail_data );
