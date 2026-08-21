@@ -2,9 +2,9 @@
 Contributors: naa986
 Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
-Requires at least: 7.0
-Tested up to: 7.0
-Stable tag: 1.1.26
+Requires at least: 7.1
+Tested up to: 7.1
+Stable tag: 1.1.27
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,9 @@ none
 none
 
 == Changelog ==
+
+= 1.1.27 =
+* WordPress 7.1 compatibility update.
 
 = 1.1.26 =
 * WordPress 7.0 compatibility update.
