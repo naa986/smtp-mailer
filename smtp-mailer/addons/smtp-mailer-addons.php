@@ -7,12 +7,12 @@ function smtp_mailer_display_addons()
     echo '<h2>' .__('SMTP Mailer Add-ons', 'smtp-mailer') . '</h2>';
     
     $addons_data = array();
-
+    
     $addon_1 = array(
-        'name' => 'Reply-To',
-        'thumbnail' => SMTP_MAILER_URL.'/addons/images/smtp-mailer-reply-to.png',
-        'description' => 'Set a Reply-To address for all outgoing email messages',
-        'page_url' => 'https://wphowto.net/how-to-add-a-reply-to-address-in-the-smtp-mailer-wordpress-plugin-6997',
+        'name' => 'Cc',
+        'thumbnail' => SMTP_MAILER_URL.'/addons/images/smtp-mailer-cc.png',
+        'description' => 'Set a Cc recipient for all outgoing email messages',
+        'page_url' => 'https://wphowto.net/smtp-mailer-plugin-cc-configuration-7580',
     );
     array_push($addons_data, $addon_1);
     
@@ -23,6 +23,14 @@ function smtp_mailer_display_addons()
         'page_url' => 'https://wphowto.net/smtp-mailer-email-logger-7066',
     );
     array_push($addons_data, $addon_2);
+    
+    $addon_3 = array(
+        'name' => 'Reply-To',
+        'thumbnail' => SMTP_MAILER_URL.'/addons/images/smtp-mailer-reply-to.png',
+        'description' => 'Set a Reply-To address for all outgoing email messages',
+        'page_url' => 'https://wphowto.net/how-to-add-a-reply-to-address-in-the-smtp-mailer-wordpress-plugin-6997',
+    );
+    array_push($addons_data, $addon_3);
     
     //Display the list
     foreach ($addons_data as $addon) {

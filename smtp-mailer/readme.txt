@@ -4,7 +4,7 @@ Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
 Requires at least: 7.1
 Tested up to: 7.1
-Stable tag: 1.1.27
+Stable tag: 1.1.28
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,8 +16,9 @@ Configure a SMTP server to send email from your WordPress site. Configure the wp
 
 === SMTP Mailer Add-ons ===
 
-* [Reply-To](https://wphowto.net/how-to-add-a-reply-to-address-in-the-smtp-mailer-wordpress-plugin-6997)
+* [Cc](https://wphowto.net/smtp-mailer-plugin-cc-configuration-7580)
 * [Email Logger](https://wphowto.net/smtp-mailer-email-logger-7066)
+* [Reply-To](https://wphowto.net/how-to-add-a-reply-to-address-in-the-smtp-mailer-wordpress-plugin-6997)
 
 === SMTP Mailer Settings ===
 
@@ -74,6 +75,9 @@ none
 none
 
 == Changelog ==
+
+= 1.1.28 =
+* Added support for the Cc add-on.
 
 = 1.1.27 =
 * WordPress 7.1 compatibility update.

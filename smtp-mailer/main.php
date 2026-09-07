@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.27
-Requires at least: 7.0
+Version: 1.1.28
+Requires at least: 7.1
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.27';
+    var $plugin_version = '1.1.28';
     var $phpmailer_version = '7.1.1';
     var $plugin_url;
     var $plugin_path;
@@ -858,6 +858,18 @@ function smtp_mailer_pre_wp_mail($null, $atts)
         }
     }
     /*end of reply_to code */
+    /*cc code */
+    $smtpmailer_cc = '';
+    $smtpmailer_cc = apply_filters('smtpmailer_cc', $smtpmailer_cc);
+    if(isset($smtpmailer_cc) && !empty($smtpmailer_cc)){
+        $temp_cc_recipients = explode(",", $smtpmailer_cc);
+        $cc = array();
+        foreach($temp_cc_recipients as $temp_cc_recipient){
+            $cc_recipient = trim($temp_cc_recipient);
+            $cc[] = $cc_recipient;
+        }        
+    }
+    /*end of cc code */
     // Set mail's subject and body.
     $phpmailer->Subject = $subject;
     $phpmailer->Body    = $message;
